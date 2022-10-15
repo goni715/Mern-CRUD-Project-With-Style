@@ -21,7 +21,8 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^9.0.8",
     "react-tooltip": "^4.2.21",
-    "read-excel-file": "^5.4.5"
+    "read-excel-file": "^5.4.5",
+    "sweetalert2": "^11.5.1"
   },
   "scripts": {
     "start": "react-scripts start",

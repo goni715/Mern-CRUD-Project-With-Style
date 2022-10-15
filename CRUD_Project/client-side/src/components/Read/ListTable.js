@@ -3,12 +3,16 @@ import {Delete, Read} from "../../APIServices/CRUDServices";
 import FullScreenLoader from "../Common/FullScreenLoader";
 import {ErrorToast, SuccessToast} from "../../Helper/ValidationHelper";
 import {ToastContainer} from "react-toastify";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import Swal from "sweetalert2";
 
 
-const ListTable = () => {
 
-    let [DataList,SetDataList]=useState([]);
+ const ListTable = () => {
+
+    const [DataList,SetDataList]=useState([]);
+
+
 
     useEffect(()=>{
 
@@ -20,32 +24,77 @@ const ListTable = () => {
 
 
 
+
    /* Delete data*/
-    //const history =
+    
     const navigate = useNavigate();
-    const DeleteItem = (id) => {
 
-      Delete(id).then((result)=>{
-           if(result===true){
-                 SuccessToast("Delete Success");
-
-                 Read().then((result)=>{
-
-                   SetDataList(result);
+  const DeleteItem = (id)=> {
 
 
-                  })
 
-           }
-           else{
-              ErrorToast("Request Fail Try Again");
-           }
+      Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+          if (result.isConfirmed) {
+
+
+              Delete(id).then((result)=>{
+
+                   if(result===true){
+
+                        Read().then((result)=>{
+                           SetDataList(result);
+                          })
+
+                            //SweetAlert-Part
+                              Swal.fire(
+                               'Deleted!',
+                           'Your file has been deleted.',
+                           'success'
+                              )
+
+                     }
+                      else{
+
+                          Swal.fire({
+                              icon: 'error',
+                               title: 'Oops...',
+                               text: 'Something went wrong!',
+
+
+                          })
+
+                     }
+
+
+                })/*Delete-FunctionEnded*/
+
+
+
+
+
+
+          }
+
+
       })
+      /*DeleteItem-FunctionEnded*/
+
+
+
+
+
     }
 
 
     /* Update data*/
-    //const navigate = useNavigate();
     const UpdateItem = (id) => {
 
          navigate("/update/"+id);
@@ -83,7 +132,7 @@ const ListTable = () => {
                                                 return(
                                                     <tr>
                                                         <td>
-                                                            <div className="d-flex px-2 py-1">
+                                                            <div className="d-flex animated fadeInUp px-2 py-1">
                                                                 <div>
                                                                     <img src={item.Img} className="avatar avatar-sm me-3" alt={"user1"}/>
                                                                 </div>
@@ -94,19 +143,19 @@ const ListTable = () => {
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <h6 className="mb-0 text-sm">{item.UnitPrice}</h6>
+                                                            <h6 className="mb-0 animated fadeInUp text-sm">{item.UnitPrice}</h6>
                                                         </td>
                                                         <td>
-                                                            <h6 className="mb-0 text-sm">{item.Quantity}</h6>
+                                                            <h6 className="mb-0 animated fadeInUp text-sm">{item.Quantity}</h6>
                                                         </td>
                                                         <td>
-                                                            <h6 className="mb-0 text-sm">{item.TotalPrice}</h6>
+                                                            <h6 className="mb-0 animated fadeInUp text-sm">{item.TotalPrice}</h6>
                                                         </td>
                                                         <td>
-                                                            <div className="btn-group" role="group" aria-label="Basic Example">
-                                                                 <button onClick={DeleteItem.bind(this,item._id)} className="btn btn-danger"><i className="fa fa-trash-alt"/></button>
+                                                            <div className="btn-group animated fadeInUp" role="group" aria-label="Basic Example">
+                                                                <button onClick={DeleteItem.bind(this,item._id)} className="btn btn-danger"><i className="fa fa-trash-alt"/></button>
                                                                  <button onClick={UpdateItem.bind(this,item._id)} className="btn btn-success"><i className="fa fa-edit"/></button>
-                                                            <ToastContainer/>
+                                                                  <ToastContainer/>
                                                             </div>
                                                         </td>
                                                     </tr>

@@ -76,10 +76,13 @@ const UpdateForm = (props) => {
                         Loader.classList.add("d-none");
                         SuccessToast("Data Update Success");
 
-                        //RedirectToReadPage
-                       navigate("/", {
-                            replace: true
-                        });
+                        setTimeout(function(){
+
+                            navigate("/", {
+                                replace: true
+                            });
+
+                        },2000);
 
 
                     }else{
